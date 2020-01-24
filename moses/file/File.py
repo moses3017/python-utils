@@ -6,7 +6,7 @@ class File:
 
     """
 
-    def __init__(self, path):
+    def __init__(self, path: str):
         if not isinstance(path, str):
             raise RuntimeError("path must be str type.")
 
