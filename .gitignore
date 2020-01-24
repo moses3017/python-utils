@@ -1,0 +1,5 @@
+.idea/
+moses/__pycache__/
+moses/file/__pycache__/
+moses/hash/__pycache__/
+
