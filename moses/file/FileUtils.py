@@ -1,12 +1,16 @@
 import os
-import types
 import shutil
-from moses.file.File import File
-from moses.hash.Hash import Hash
+import types
+from moses.hash import Hash
 
 
 def get_size(path: (str,)):
-    return File(path).get_size()
+    """
+    unit: byte
+    :param path:
+    :return:
+    """
+    return os.stat(path).st_size
 
 
 def delete(path: (str,)):
@@ -130,4 +134,3 @@ def group_by_md5(paths: (list,)):
         groups.setdefault(Hash.md5(path), []).append(path)
 
     return groups
-
