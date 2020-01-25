@@ -3,6 +3,7 @@ import shutil
 import types
 
 from moses.hash import Hash
+from moses.collection import CollectionUtils
 
 
 def get_size(path: (str,)):
@@ -86,33 +87,6 @@ def get_files_recursive(path: (str,)):
     return files
 
 
-def group(path: (str,), filter_func: (types.FunctionType,) = None):
-    """
-    group by size, md5_until, md5
-    :param path:
-    :param filter_func
-    :return:
-    """
-    if filter_func is not None and not hasattr(filter_func, '__call__'):
-        raise RuntimeError("filter_func must be function-like type")
-
-    x1 = group_by_size(get_files_recursive(path))
-
-    x2 = {}
-    for key, value in x1.items():
-        if filter_func is None or filter_func(key, value):
-            for k, v in group_by_md5_until(value, 4096).items():
-                x2.setdefault(k, []).extend(v)
-
-    x3 = {}
-    for key, value in x2.items():
-        if filter_func is None or filter_func(key, value):
-            for k, v in group_by_md5(value).items():
-                x3.setdefault(k, []).extend(v)
-
-    return x3
-
-
 def group_by_size(paths: (list,)):
     groups = {}
     for file_path in paths:
@@ -129,9 +103,32 @@ def group_by_md5_until(paths: (list,), extent: (int,)):
     return groups
 
 
-def group_by_md5(paths: (list,)):
-    groups = {}
-    for path in paths:
-        groups.setdefault(Hash.md5(path), []).append(path)
+def group_by_md5(paths: (list,), filter_func: (types.FunctionType,) = None):
+    """
+    group_by_md5
+    :param paths:
+    :param filter_func:
+    :return:
+    """
+    if filter_func is not None and not hasattr(filter_func, '__call__'):
+        raise RuntimeError("filter_func must be function-like type")
 
-    return groups
+    def predicate(k1, v1):
+        return filter_func is not None and not filter_func(k1, v1)
+
+    x1 = group_by_size(paths)
+    CollectionUtils.remove(x1, predicate)
+
+    x2 = {}
+    for key, value in x1.items():
+        for k, v in group_by_md5_until(value, 4096).items():
+            x2.setdefault(k, []).extend(v)
+    CollectionUtils.remove(x2, predicate)
+
+    x3 = {}
+    for key, value in x2.items():
+        for path in value:
+            x3.setdefault(Hash.md5(path), []).append(path)
+    CollectionUtils.remove(x3, predicate)
+
+    return x3
