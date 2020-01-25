@@ -1,6 +1,7 @@
 import os
 import shutil
 import types
+
 from moses.hash import Hash
 
 

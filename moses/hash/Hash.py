@@ -13,11 +13,11 @@ def md5(path: (str,)):
     return hash_md5.hexdigest()
 
 
-def md5_until(path: (str,), extent: (int, )):
+def md5_until(path: (str,), extent: (int,)):
     if not isinstance(path, (str,)):
         raise RuntimeError("path must be type in (str,)")
 
-    if not isinstance(extent, (int, )):
+    if not isinstance(extent, (int,)):
         raise RuntimeError("extent must be type in (int,)")
 
     hash_md5 = hashlib.md5()
