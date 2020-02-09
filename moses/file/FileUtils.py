@@ -2,8 +2,8 @@ import os
 import shutil
 import types
 
-from moses.hash import Hash
 from moses.collection import CollectionUtils
+from moses.hash import Hash
 
 
 def get_size(path: (str,)):
@@ -132,3 +132,7 @@ def group_by_md5(paths: (list,), filter_func: (types.FunctionType,) = None):
     CollectionUtils.remove(x3, predicate)
 
     return x3
+
+
+def get_current_dir():
+    return os.getcwd()
