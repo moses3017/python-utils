@@ -1,6 +1,7 @@
 import os
 import shutil
 import types
+from pathlib import Path
 
 from moses.collection import CollectionUtils
 from moses.hash import Hash
@@ -136,3 +137,39 @@ def group_by_md5(paths: (list,), filter_func: (types.FunctionType,) = None):
 
 def get_current_dir():
     return os.getcwd()
+
+
+def create_dirs(dirs: (str,)):
+    """
+    create nested dir if not exists
+    :param dirs: like '/a/b/c'
+    :return:
+    """
+    Path(dirs).mkdir(parents=True, exist_ok=True)
+
+
+def exists(path: (str,)):
+    """
+    check path exists
+    :param path:
+    :return:
+    """
+    return Path(path).exists()
+
+
+def is_dir(path: (str,)):
+    """
+    check path is directory
+    :param path:
+    :return:
+    """
+    return Path(path).is_dir()
+
+
+def is_file(path: (str,)):
+    """
+    check path is file
+    :param path:
+    :return:
+    """
+    return Path(path).is_file()

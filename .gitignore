@@ -3,3 +3,4 @@ moses/__pycache__/
 moses/file/__pycache__/
 moses/hash/__pycache__/
 moses/collection/__pycache__/
+moses/config/__pycache__/
